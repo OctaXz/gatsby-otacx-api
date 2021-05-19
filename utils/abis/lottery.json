@@ -267,6 +267,31 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "outValue",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "SwapOctaGold",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "adminAddress",
     "outputs": [
@@ -414,12 +439,12 @@
         "type": "uint8[4]"
       }
     ],
-    "name": "generateCombinations",
+    "name": "generateNumberIndexKey",
     "outputs": [
       {
-        "internalType": "uint32[11]",
+        "internalType": "uint64[11]",
         "name": "",
-        "type": "uint32[11]"
+        "type": "uint64[11]"
       }
     ],
     "stateMutability": "pure",
@@ -806,19 +831,6 @@
         "internalType": "contract IBEP20",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "tk0Pc",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
