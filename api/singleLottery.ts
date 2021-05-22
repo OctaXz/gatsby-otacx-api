@@ -48,10 +48,10 @@ export const lottery = async (
     match3Ticket: numbers2[2] / ticketPrice,
     match2Ticket: numbers2[3] / ticketPrice,
     match1Ticket: numbers2[4] ? numbers2[4] / ticketPrice : null,
-    poolJackpot: ceilDecimal((poolSize / 100) * ratesToUse.jackpot, 2),
-    poolMatch3: ceilDecimal((poolSize / 100) * ratesToUse.match3, 2),
-    poolMatch2: ceilDecimal((poolSize / 100) * ratesToUse.match2, 2),
-    poolMatch1: ratesToUse.match1 ? ceilDecimal((poolSize / 100) * ratesToUse.match1, 2) : null,
+    poolJackpot: ceilDecimal((poolSize / 100) * ratesToUse.jackpot, 3),
+    poolMatch3: ceilDecimal((poolSize / 100) * ratesToUse.match3, 3),
+    poolMatch2: ceilDecimal((poolSize / 100) * ratesToUse.match2, 3),
+    poolMatch1: ratesToUse.match1 ? ceilDecimal((poolSize / 100) * ratesToUse.match1, 3) : null,
   };
   return lottery;
 };
