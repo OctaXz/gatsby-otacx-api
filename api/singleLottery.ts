@@ -42,7 +42,7 @@ export const lottery = async (
     lotteryDate: new Date(lotteryTime[0] *1000),
     lotteryNumbers: numbers1.map((x) => Number(x)),
     poolSize: ceilDecimal(poolSize, 2),
-    burned: ceilDecimal((poolSize / 100) * ratesToUse.burn, 2),
+    burned: ceilDecimal((poolSize / 100) * ratesToUse.burn, 3),
     contractLink: `https://bscscan.com/address/${LOTTERY_CONTRACT}`,
     jackpotTicket: numbers2[1] / ticketPrice,
     match3Ticket: numbers2[2] / ticketPrice,
