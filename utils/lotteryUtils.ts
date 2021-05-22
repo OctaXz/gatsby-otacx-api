@@ -7,7 +7,7 @@ import lotteryABI from "./abis/lottery.json";
 export interface SingleLotteryReturn {
   numbers1: Promise<[string, string, string, string]>;
   numbers2: Promise<Array<string>>;
-  lotteryDate: number;
+  lotteryDate:  Promise<[number]>;
   index: number;
 }
 
@@ -51,6 +51,12 @@ export interface LotteryHistory {
 export const getSingleLotteryBatch = (index: number): SingleLotteryReturn => {
   const lotteryContract = getContract(lotteryABI, LOTTERY_CONTRACT);
   const batch = new PromisifyBatchRequest<string>();
+  const batch1 = new PromisifyBatchRequest<number>();
+  [
+    lotteryContract.methods.historyDrawingTime(index, 0).call
+
+  ].map((x) => batch1.add(x));
+
   const batch2 = new PromisifyBatchRequest<string>();
   [
     lotteryContract.methods.historyNumbers(index, 0).call,
@@ -78,7 +84,7 @@ export const getSingleLotteryBatch = (index: number): SingleLotteryReturn => {
   return {
     numbers1: batch.execute() as Promise<[string, string, string, string]>,
     numbers2: batch2.execute() as Promise<Array<string>>,
-    lotteryDate: lotteryContract.methods.historyDrawingTime(index, 0).call as number,
+    lotteryDate: batch1.execute() as Promise<[number]>,
     index,
   };
 };
