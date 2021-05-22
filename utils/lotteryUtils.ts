@@ -53,8 +53,7 @@ export const getSingleLotteryBatch = (index: number): SingleLotteryReturn => {
   const batch = new PromisifyBatchRequest<string>();
   const batch1 = new PromisifyBatchRequest<number>();
   [
-    lotteryContract.methods.historyDrawingTime(index, 0).call
-
+    lotteryContract.methods.historyDrawingTime(index).call
   ].map((x) => batch1.add(x));
 
   const batch2 = new PromisifyBatchRequest<string>();
