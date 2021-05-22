@@ -7,6 +7,7 @@ import lotteryABI from "./abis/lottery.json";
 export interface SingleLotteryReturn {
   numbers1: Promise<[string, string, string, string]>;
   numbers2: Promise<Array<string>>;
+  lotteryDate: number;
   index: number;
 }
 
@@ -77,6 +78,7 @@ export const getSingleLotteryBatch = (index: number): SingleLotteryReturn => {
   return {
     numbers1: batch.execute() as Promise<[string, string, string, string]>,
     numbers2: batch2.execute() as Promise<Array<string>>,
+    lotteryDate: lotteryContract.methods.historyDrawingTime(index, 0).call as number,
     index,
   };
 };

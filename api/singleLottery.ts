@@ -27,18 +27,19 @@ export const lottery = async (
       maxLotteryNumber: issueIndex,
     };
   }
-  const { numbers1: numbers1Prom, numbers2: numbers2Prom } = getSingleLotteryBatch(lotteryNumber);
+  const { numbers1: numbers1Prom, numbers2: numbers2Prom, lotteryDate: lotteryTimeProm } = getSingleLotteryBatch(lotteryNumber);
+  const lotteryTime = await lotteryTimeProm;
   const numbers1 = await numbers1Prom;
   const numbers2Res = await numbers2Prom;
   const numbers2: Array<number> = numbers2Res.map((n) => new BigNumber(n).div(1e18).toNumber());
 
-  const lotteryDate = generateLotteryDate(lotteryNumber);
+  // const lotteryDate = generateLotteryDate(lotteryNumber);
   const ratesToUse = getRates(lotteryNumber);
   const ticketPrice = getTicketPrice(lotteryNumber);
   const poolSize = numbers2[0];
   const lottery: SingleLottery = {
     lotteryNumber,
-    lotteryDate,
+    lotteryDate: new Date(lotteryTime*1000),
     lotteryNumbers: numbers1.map((x) => Number(x)),
     poolSize: ceilDecimal(poolSize, 2),
     burned: ceilDecimal((poolSize / 100) * ratesToUse.burn, 2),
