@@ -39,7 +39,7 @@ export const lottery = async (
   const poolSize = numbers2[0];
   const lottery: SingleLottery = {
     lotteryNumber,
-    lotteryDate: new Date(lotteryTime*1000),
+    lotteryDate: new Date(lotteryTime[0] *1000),
     lotteryNumbers: numbers1.map((x) => Number(x)),
     poolSize: ceilDecimal(poolSize, 2),
     burned: ceilDecimal((poolSize / 100) * ratesToUse.burn, 2),
