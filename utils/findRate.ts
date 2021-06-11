@@ -19,7 +19,7 @@ export const getAmountOut = async (amount:number,pairs:Array<string>): Promise<B
    const amountMul = new BigNumber(amount).times(1e18).toFixed()
    console.log(amount,amountMul,pairs)
 
-  const [amountIn,amountOut] = await contract.methods.getAmountOut(amountMul,pairs).call();
+  const [amountIn,amountOut] = await contract.methods.getAmountsOut(amountMul,pairs).call();
 
   return new BigNumber(amountOut);
 };
