@@ -326,7 +326,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<void> =>
     const { amount, tokenid } = req.query ;
     const amountVal = typeof amount !== "undefined" ? Number(amount) : 0
     const tokenIdVal = typeof tokenid !== "undefined" ? Number(tokenid) : -1
-    const result = fetchInfo(amountVal,tokenIdVal)
+    const result = await fetchInfo(amountVal,tokenIdVal)
 
     res.json(result);
 };
