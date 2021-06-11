@@ -153,7 +153,7 @@ const botToken: stringToken[] = [
     const { amount, tokenid } = query;
     const amountVal = typeof amount !== "undefined" ? Number(amount) : 0
     const tokenIdVal = typeof tokenid !== "undefined" ? Number(tokenid) : -1
-    if(amount || tokenid) return 0
+    // if(amount || tokenid) return 0
     const pair0 = botToken.filter((b)=>b.tid===tokenIdVal)[0].tokenAddress
     const pair1 = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
 
