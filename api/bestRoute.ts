@@ -1,5 +1,5 @@
 import { NowRequest, NowRequestQuery, NowResponse } from "@vercel/node";
-import { getAmountsIn } from '../utils/findRate'
+import { getAmountsIn , getAmountOut } from '../utils/findRate'
 import {getBurnedSupply, getTotalSupply} from "../utils/supply";
 
 interface pairInfo {
@@ -175,7 +175,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<void> => {
     const pair1 = '0xb86AbCb37C3A4B64f74f59301AFF131a1BEcC787'
 
 
-    const amountOut =  await getAmountsIn(amountVal, [pair0,pair1]);
+    const amountOut =  await getAmountOut(amountVal, [pair0,pair1]);
 
 
 
