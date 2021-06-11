@@ -172,7 +172,7 @@ export default async (req: NowRequest, res: NowResponse): Promise<void> => {
     const tokenIdVal = typeof tokenid !== "undefined" ? Number(tokenid) : -1
     // if(amount || tokenid) return 0
     const pair0 = botToken.filter((b)=>b.tid===tokenIdVal)[0].tokenAddress
-    const pair1 = botToken.filter((b)=>b.tid===tokenIdVal)[10].tokenAddress //'0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
+    const pair1 = '0xb86AbCb37C3A4B64f74f59301AFF131a1BEcC787'
 
     const amountOut =  await getAmountsIn(amountVal, [pair0,pair1]);
 
