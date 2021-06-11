@@ -6,6 +6,7 @@ const routerAdress = '0x10ed43c718714eb63d5aa57b78b54704e256024e'
 const contract = getContract(router, routerAdress);
 
 export const getAmountsIn = async (amount:number,pairs:Array<string>): Promise<BigNumber> => {
+  console.log(amount,pairs)
   const [amountIn,amountOut] = await contract.methods.getAmountsIn(amount,pairs).call();
 
   return new BigNumber(amountOut);
