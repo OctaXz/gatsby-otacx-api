@@ -1,6 +1,7 @@
 import { NowRequest, NowRequestQuery, NowResponse } from "@vercel/node";
 import { getAmountsIn , getAmountOut } from '../utils/findRate'
 import {getBurnedSupply, getTotalSupply} from "../utils/supply";
+import pairToken from "../utils/tokenPair";
 
 interface pairInfo {
     token0: string
@@ -149,43 +150,21 @@ const botToken: stringToken[] = [
   ]
 
 
-
-
-//
-// export const handleAPICall = async (query: NowRequestQuery) => {
-//
-//     const { amount, tokenid } = query;
-// const amountVal = typeof amount !== "undefined" ? Number(amount) : 0
-// const tokenIdVal = typeof tokenid !== "undefined" ? Number(tokenid) : -1
-// // if(amount || tokenid) return 0
-// const pair0 = botToken.filter((b)=>b.tid===tokenIdVal)[0].tokenAddress
-// const pair1 = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
-//
-// return await getAmountsIn(amountVal, [pair0,pair1]);
-// };
-
-
 export default async (req: NowRequest, res: NowResponse): Promise<void> => {
 
     const { amount, tokenid } = req.query ;
     const amountVal = typeof amount !== "undefined" ? Number(amount) : 0
     const tokenIdVal = typeof tokenid !== "undefined" ? Number(tokenid) : -1
     // if(amount || tokenid) return 0
-    const pair0 = botToken.filter((b)=>b.tid===tokenIdVal)[0].tokenAddress
+    const pair0 = botToken.filter((b)=>b.tid===tokenIdVal)[0].tokenAddress // bot address
+
     const pair1 = '0xb86AbCb37C3A4B64f74f59301AFF131a1BEcC787'
-
-
     const amountOut =  await getAmountOut(amountVal, [pair0,pair1]);
+    let routes = []
+    for (let i =0 ;  i < pairToken.length ;i++)
+    {
 
-
-
-      //    let totalSupply = await getTotalSupply();
-      //   totalSupply = totalSupply.div(1e18);
-      //
-      // let burnedSupply = await getBurnedSupply();
-      // burnedSupply = burnedSupply.div(1e18);
-      //
-      // const circulatingSupply = totalSupply.minus(burnedSupply);
+    }
 
   res.json({
     amountOut: amountOut.toNumber()
