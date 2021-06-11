@@ -133,7 +133,7 @@ const fetchBestPrice = async (originalSymbol : string ,originTokenAddress : stri
     return resultX;
 }
 
-const fetchReturnToken = async (originalSymbol : string ,originTokenAddress : string ,currentAmount :number , currentAmountFix :string , targetSymbol:string, targetTokenAddress:string) => {
+const fetchReturnToken = async (originalSymbol : string ,originTokenAddress : string ,currentAmount :number , currentAmountFix :string , targetTokenSymbol:string, targetTokenAddress:string) => {
 
     const batch1 = new PromisifyBatchRequest();
     const batch2 = new PromisifyBatchRequest();
@@ -186,8 +186,8 @@ const fetchReturnToken = async (originalSymbol : string ,originTokenAddress : st
             const amountTargetTokenFix = info[1]
             const amountTargetToken = new BigNumber(amountTargetTokenFix).div(1e18).toNumber()
 
-            const targetSymbol = targetTokenInfo.tokenSymbol
-            const targetAddress = targetTokenInfo.tokenAddress
+            const targetSymbol =  targetTokenSymbol //targetTokenInfo.tokenSymbol
+            const targetAddress =  targetTokenAddress // targetTokenInfo.tokenAddress
             // const tokenB = n.tokenB
             // @ts-ignore
             let targetPricePerBUSD = 1; //new BigNumber(amountPrices[index][1]).div(1e18).toNumber()
