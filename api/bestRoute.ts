@@ -482,6 +482,9 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
     let status = 0
     let profite = 0
 
+    let userAmount = amountVal
+    let resultAmount = 0
+
 
     if (false) {
 
@@ -502,11 +505,9 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
         const last_route = routePath[routePath.length - 1]
         status = 1
         profite = last_route.targetAmount - tokenMinimumValue
+        resultAmount = tokenMinimumValue + profite
     }
 
-
-    let userAmount = amountVal
-    let resultAmount = 0
 
     let result = {
         "status": status,
