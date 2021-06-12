@@ -511,13 +511,17 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
         resultAmount = tokenMinimumValue + profite
     }
 
+    let paths = []
+    paths = routePath.map((route)=>{
+                            return route.originTokenAddress
+                      })
 
     let result = {
         "status": status,
         "userAmt": userAmount,
         "resultAmt": resultAmount,
         "profit": profite,
-        "routes": routePath,
+        "routes": [...paths,paths[0]],
         "fee": 0
     }
 
