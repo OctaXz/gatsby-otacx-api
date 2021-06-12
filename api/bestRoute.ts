@@ -160,8 +160,9 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
     const batch1 = new PromisifyBatchRequest();
     const batch2 = new PromisifyBatchRequest();
     // #################################### FETCH SWAP AMOUNT ORIGINAL TO TARGET TOKEN #############################################
+    const p_arr: string[] = []
     const allPairTokens = pairActual.filter((b) => b.tokenAddress !== originTokenAddress).map(async (target) => {
-        const targetToken = target.tokenAddress
+        const targetToken = target.tokenAddress.trim().replace(" ","")
         //console.log(amountValFix)
         // const amountMul = new BigNumber(amountValFix).toFixed()
 
@@ -170,7 +171,8 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
         //if (lbAddress) {
 
         //console.log(targetToken)
-        //  console.log(amountValFix, originTokenAddress, targetToken)
+         // console.log(amountValFix, originTokenAddress, targetToken)
+        p_arr.push(originTokenAddress + "," + targetToken)
         //const item  = await  contract.methods.getAmountsOut(amountValFix, [originTokenAddress, targetToken]).call()
         //console.log(item)
         //amountTokens.push(item)
@@ -182,7 +184,7 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
         batch1.add(contract.methods.getAmountsOut(amountValFix, [originTokenAddress, targetToken]).call)
         //}
     })
-
+    console.log(p_arr.join("|"))
     //###################################### FETCH PRICE ALL TARGET TOKEN ##########################################################
     const pricePairTokens = pairActual.filter((b) => b.tokenAddress !== originTokenAddress).map(async (target) => {
 
@@ -196,7 +198,7 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
         //const  item = await contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call()
         //  const item  =await contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call()
         //  amountPrices.push(item)
-        batch2.add(contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call)
+        batch2.add(contract.methods.getAmountsOut(amountMul, [target.tokenAddress.trim().replace(" ",""), pairBUSD]).call)
         //}
     })
 
@@ -396,6 +398,7 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
 
     if (lastHop.originAmount > 0) {
         //################################################ 2 HOP ##############################################
+        console.log(lastHop.targetSymbol, lastHop.targetTokenAddress, lastHop.targetAmount, lastHop.targetAmountFix, lastHop.originTokenAddress)
         resultX = await fetchBestPrice(lastHop.targetSymbol, lastHop.targetTokenAddress, lastHop.targetAmount, lastHop.targetAmountFix, lastHop.originTokenAddress )
         if (resultX.length > 0) {
             bestPrices = resultX.reduce((a, e) => e.targetValue > a.targetValue ? e : a)

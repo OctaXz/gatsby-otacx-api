@@ -62,13 +62,13 @@ const pairToken: pairProps[] =[
     {
         tid: 11,
         tokenSymbol: 'BTCB',
-        tokenAddress: '0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51',
+        tokenAddress: '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
         pairTokens: ['WBNB','ICA' ,'MISO','τBTC','BUSD','BUCKS']
     },
     {
         tid: 12,
         tokenSymbol: 'ETH',
-        tokenAddress: '0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51',
+        tokenAddress: '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
         pairTokens: ['WBNB','ICA','BUSD','MELODY','EDOGE']
     },
     {
@@ -133,12 +133,7 @@ const pairToken: pairProps[] =[
         tokenAddress: '0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd',
         pairTokens: ['WBNB']
     },
-    {
-        tid: 23,
-        tokenSymbol: 'NEKO',
-        tokenAddress: '0xDedF440AD8bf07729EAD58F4fF52edaB20d2628d',
-        pairTokens: ['WBNB']
-    },
+
     {
         tid: 24,
         tokenSymbol: 'BIRD',
@@ -158,13 +153,7 @@ const pairToken: pairProps[] =[
         tokenAddress: '0x47bead2563dcbf3bf2c9407fea4dc236faba485a',
         pairTokens: ['WBNB']
     }
-,
-    {
-        tid: 27,
-        tokenSymbol: 'ALICE',
-        tokenAddress: '0xe7b91602ce96a537cb729f484b8ddb3c1fecbb45',
-        pairTokens: ['WBNB']
-    }
+
 
   ]
 
