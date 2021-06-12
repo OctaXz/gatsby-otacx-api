@@ -153,7 +153,13 @@ const pairToken: pairProps[] =[
         tokenAddress: '0x47bead2563dcbf3bf2c9407fea4dc236faba485a',
         pairTokens: ['WBNB']
     }
-
+    ,
+    {
+        tid: 26,
+        tokenSymbol: 'BUSD',
+        tokenAddress: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+        pairTokens: ['USDC']
+    }
 
   ]
 

@@ -134,6 +134,22 @@ const botToken: stringToken[] = [
     }
 ]
 
+interface routeInterface {
+        "originTokenAddress": string,
+        "originSymbol": string,
+        "originAmount": number,
+        "originAmountFix": string,
+        "originPricePerUnit": number,
+        "originValue": number,
+        "targetTokenAddress": string,
+        "targetSymbol": string,
+        "targetAmount": number,
+        "targetAmountFix": string,
+        "targetPricePerBUSD": number,
+        "targetValue": number
+}
+
+
 const getLpAddress = (tokenA: string, tokenB: string) => {
     const tokens = tokenA.toLowerCase() < tokenB.toLowerCase() ? [tokenA, tokenB] : [tokenB, tokenA]
     const address = getCreate2Address(
@@ -151,7 +167,7 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
     // let amountTokens: any[] = []
     //  let  amountPrices : any[] = []
     // try {
-
+    // USDC
     // @ts-ignore
     const pairActual = pairToken.filter((b) => b.tokenAddress !== originTokenAddress && b.tokenAddress != ignorLastAddress && b.pairTokens.indexOf(originalSymbol) > -1)
     // console.log(pairActual)
@@ -171,8 +187,8 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
         //if (lbAddress) {
 
         //console.log(targetToken)
-         // console.log(amountValFix, originTokenAddress, targetToken)
-        p_arr.push(originTokenAddress + "," + targetToken)
+       //  console.log(amountValFix, originTokenAddress, targetToken,originTokenAddress)
+       // p_arr.push(originTokenAddress + "," + targetToken)
         //const item  = await  contract.methods.getAmountsOut(amountValFix, [originTokenAddress, targetToken]).call()
         //console.log(item)
         //amountTokens.push(item)
@@ -181,57 +197,60 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
         //console.log(item)
         // return item
         // console.log(amountValFix,originTokenAddress, targetToken)
-        batch1.add(contract.methods.getAmountsOut(amountValFix, [originTokenAddress, targetToken]).call)
+
+        batch1.add(contract.methods.getAmountsOut(amountValFix, [originTokenAddress, targetToken, originTokenAddress ]).call)
         //}
     })
     console.log(p_arr.join("|"))
     //###################################### FETCH PRICE ALL TARGET TOKEN ##########################################################
-    const pricePairTokens = pairActual.filter((b) => b.tokenAddress !== originTokenAddress).map(async (target) => {
-
-        const amountMul = new BigNumber(1).times(1e18).toFixed(0)
-        // botToken.filter((b)=>b.tokenSymbol !=="BUSD")[0].tokenAddress
-
-        //const lbAddress = getLpAddress(target.tokenAddress, pairBUSD)
-        //console.log(lbAddress)
-        // if (lbAddress) {
-
-        //const  item = await contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call()
-        //  const item  =await contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call()
-        //  amountPrices.push(item)
-        batch2.add(contract.methods.getAmountsOut(amountMul, [target.tokenAddress.trim().replace(" ",""), pairBUSD]).call)
-        //}
-    })
-
+    // const pricePairTokens = pairActual.filter((b) => b.tokenAddress !== originTokenAddress).map(async (target) => {
+    //
+    //     const amountMul = new BigNumber(1).times(1e18).toFixed(0)
+    //     // botToken.filter((b)=>b.tokenSymbol !=="BUSD")[0].tokenAddress
+    //
+    //     //const lbAddress = getLpAddress(target.tokenAddress, pairBUSD)
+    //     //console.log(lbAddress)
+    //     // if (lbAddress) {
+    //
+    //     //const  item = await contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call()
+    //     //  const item  =await contract.methods.getAmountsOut(amountMul, [target.tokenAddress, pairBUSD]).call()
+    //     //  amountPrices.push(item)
+    //     batch2.add(contract.methods.getAmountsOut(amountMul, [target.tokenAddress.trim().replace(" ",""), pairBUSD]).call)
+    //     //}
+    // })
 
     let originValue = amountVal
     let originPricePerUnit = amountVal
-    if (originTokenAddress != pairBUSD) {
-        const amountMul = new BigNumber(1).times(1e18).toFixed()
-        // pricePairTokens.push(await  contract.methods.getAmountsOut(amountMul, [originTokenAddress, pairBUSD]).call())
-        batch2.add(contract.methods.getAmountsOut(amountMul, [originTokenAddress, pairBUSD]).call)
-        //  const item = contract.methods.getAmountsOut(amountMul, [originTokenAddress, pairBUSD]).call()
-        //  amountTokens.push(item)
-    }
+    // if (originTokenAddress != pairBUSD) {
+    //     const amountMul = new BigNumber(1).times(1e18).toFixed()
+    //     // pricePairTokens.push(await  contract.methods.getAmountsOut(amountMul, [originTokenAddress, pairBUSD]).call())
+    //     batch2.add(contract.methods.getAmountsOut(amountMul, [originTokenAddress, pairBUSD]).call)
+    //     //  const item = contract.methods.getAmountsOut(amountMul, [originTokenAddress, pairBUSD]).call()
+    //     //  amountTokens.push(item)
+    // }
 
     const amountTokens = await batch1.execute().catch(() => {
         console.log("error amountTokens")
         return [[0, 0]]
     }) // allPairTokens //
     //  console.log(amountTokens)
-    const amountPrices = await batch2.execute().catch(() => {
-        console.log("error amountPrices")
-        return [[0, 0]]
-    })  // pricePairTokens //
+    // const amountPrices = await batch2.execute().catch(() => {
+    //     console.log("error amountPrices")
+    //     return [[0, 0]]
+    // })  // pricePairTokens //
     // console.log(amountPrices)
 
-    if (originTokenAddress != pairBUSD) {
-        // @ts-ignore
-        const originCheckVal = amountPrices[amountPrices.length - 1]
-        // @ts-ignore
-        originPricePerUnit = new BigNumber(originCheckVal[1]).div(1e18).toNumber()
-        originValue = originPricePerUnit * amountVal
-    }
+    // if (originTokenAddress != pairBUSD) {
+    //     // @ts-ignore
+    //     const originCheckVal = amountPrices[amountPrices.length - 1]
+    //     // @ts-ignore
+    //     originPricePerUnit = new BigNumber(originCheckVal[1]).div(1e18).toNumber()
+    //     originValue = originPricePerUnit * amountVal
+    // }
     //###################################### MAPPING BETWEEN PRICE AND AMOUNT TARGET TOKEN ########################################
+
+
+
     // @ts-ignore
     const resultX = amountTokens.map((info: any[], index: string | number) => {
         // @ts-ignore
@@ -249,13 +268,14 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
         const targetAddress = targetTokenInfo.tokenAddress
         // const tokenB = n.tokenB
         // @ts-ignore
-        const targetPricePerBUSD = new BigNumber(amountPrices[index][1]).div(1e18).toNumber()
-
+        //const targetPricePerBUSD = new BigNumber(amountPrices[index][1]).div(1e18).toNumber()
+        const targetPricePerBUSD = amountOriginToken / amountTargetToken //new BigNumber(info[2]).div(1e18).toNumber()
         // @ts-ignore
-        const targetQtyPerUnit = new BigNumber(amountPrices[index][0]).div(1e18).toNumber()
+        //const targetQtyPerUnit = new BigNumber(amountPrices[index][0]).div(1e18).toNumber()
         // //
-        const targetValue = amountTargetToken * targetPricePerBUSD
+        //const targetValue = new BigNumber(info[2]).div(1e18).toNumber() //amountTargetToken * targetPricePerBUSD
 
+        const targetValue = amountTargetToken * targetPricePerBUSD
 
         return {
             "originTokenAddress": originTokenAddress,
@@ -272,6 +292,22 @@ const fetchBestPrice = async (originalSymbol: string, originTokenAddress: string
             "targetValue": targetValue
         }
     });
+    if (resultX.length == 0 )
+          return [{
+            "originTokenAddress": originTokenAddress,
+            "originSymbol": originalSymbol,
+            "originAmount": 0,
+            "originAmountFix": "",
+            "originPricePerUnit": originPricePerUnit,
+            "originValue": originValue,
+            "targetTokenAddress": "",
+            "targetSymbol": "",
+            "targetAmount": 0,
+            "targetAmountFix": "",
+            "targetPricePerBUSD": 0,
+            "targetValue": 0
+        }]
+
     return resultX;
 }
 
@@ -368,9 +404,8 @@ const fetchReturnToken = async (originalSymbol: string, originTokenAddress: stri
             "targetPricePerBUSD": targetPricePerBUSD,
             "targetValue": targetValue
         }
-
-
     });
+
     return resultX;
 }
 
@@ -387,7 +422,9 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
     const amountValFix = new BigNumber(amountVal).times(1e18).toFixed()
 
     //################################################ 1 HOP ##############################################
+
     let resultX = await fetchBestPrice(originalSymbol, originalTokenAddress, amountVal, amountValFix, "")
+
     let bestPrices = resultX.reduce((a, e) => e.targetValue > a.targetValue ? e : a)
     console.log("Hop 1", bestPrices)
     let price1 = bestPrices.targetValue as number
@@ -395,6 +432,7 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
     let lastHop = bestPrices
     routePath.push(bestPrices)
     hopCount++
+
 
     if (lastHop.originAmount > 0) {
         //################################################ 2 HOP ##############################################
@@ -457,21 +495,42 @@ export const fetchInfo = async (amountVal: number, tokenIdVal: number) => {
 
             // CASE NO PATH  SOME TOKEN  WILL BE COMPARE TO WNBNB BEFORE RETURN TO ORIGINAL TOKEN
              // @ts-ignore
-            const pairActual = pairToken.filter((b) => b.tokenAddress === lastHop.targetTokenAddress && b.pairTokens.indexOf(originalSymbol) > -1)
-            // console.log(pairActual)
-            if (pairActual.length == 0 && hopCount < 4) {
-                // CONVERT TO WBNB
-                const WBNB = botToken.filter((b) => b.tokenSymbol === "WBNB")[0]
-                resultX = await fetchReturnToken(lastHop.targetSymbol, lastHop.targetTokenAddress, lastHop.targetAmount, lastHop.targetAmountFix, WBNB.tokenSymbol, WBNB.tokenAddress)
-                if (resultX.length > 0) {
-                    bestPrices = resultX.reduce((a, e) => e.targetValue > a.targetValue ? e : a)
-                    console.log("Hop Bridge ", bestPrices)
-                    if (bestPrices.originAmount > 0) {
-                        lastHop = bestPrices
-                        hopCount++
+            let pairActual = pairToken.filter((b) => b.tokenAddress === lastHop.targetTokenAddress && b.pairTokens.indexOf(originalSymbol) > -1)
+            console.log(pairActual)
+            if (pairActual.length == 0 && hopCount <= 4) {
+
+                // @ts-ignore
+                pairActual = pairToken.filter((b) => b.tokenAddress === originalSymbol && b.pairTokens.indexOf("WBNB") > -1)
+                if (pairActual.length == 0) {
+
+                             // CONVERT TO WBNB
+                        const BUSD = botToken.filter((b) => b.tokenSymbol === "BUSD")[0]
+                        resultX = await fetchReturnToken(lastHop.targetSymbol, lastHop.targetTokenAddress, lastHop.targetAmount, lastHop.targetAmountFix, BUSD.tokenSymbol, BUSD.tokenAddress)
+                        if (resultX.length > 0) {
+                            bestPrices = resultX.reduce((a, e) => e.targetValue > a.targetValue ? e : a)
+                            console.log("Hop Bridge ", bestPrices)
+                            if (bestPrices.originAmount > 0) {
+                                lastHop = bestPrices
+                                hopCount++
+                            }
+                            routePath.push(bestPrices)
+                        }
+
+                } else {
+                    // CONVERT TO WBNB
+                    const WBNB = botToken.filter((b) => b.tokenSymbol === "WBNB")[0]
+                    resultX = await fetchReturnToken(lastHop.targetSymbol, lastHop.targetTokenAddress, lastHop.targetAmount, lastHop.targetAmountFix, WBNB.tokenSymbol, WBNB.tokenAddress)
+                    if (resultX.length > 0) {
+                        bestPrices = resultX.reduce((a, e) => e.targetValue > a.targetValue ? e : a)
+                        console.log("Hop Bridge ", bestPrices)
+                        if (bestPrices.originAmount > 0) {
+                            lastHop = bestPrices
+                            hopCount++
+                        }
+                        routePath.push(bestPrices)
                     }
-                    routePath.push(bestPrices)
                 }
+
             }
 
             resultX = await fetchReturnToken(lastHop.targetSymbol, lastHop.targetTokenAddress, lastHop.targetAmount, lastHop.targetAmountFix, originalSymbol, originalTokenAddress)
